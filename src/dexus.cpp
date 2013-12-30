@@ -189,7 +189,7 @@ SEXP dexus_impl(SEXP XS, SEXP nrowS, SEXP ncolS,
 	int g = INTEGER(nrowS)[0];
 	int N =INTEGER(ncolS)[0];
 
-	const double EPS = 1e-12;
+	const double EPS = 1e-100;
 	const double DEFAULT_R = 20; // R value used when re-setting clusters
 
 	double* alphaINIT=REAL(alphaINITS);
@@ -265,7 +265,7 @@ SEXP dexus_impl(SEXP XS, SEXP nrowS, SEXP ncolS,
 
 		x = X + gg*N; // current gene
 
-		for (iter=0;iter<cyc;iter++){
+		for (iter=0;iter<=cyc;iter++){
 			// E-step
 			for (j=0;j<n;j++){
 				alphaRowMean[j]=0.0;
@@ -332,8 +332,12 @@ SEXP dexus_impl(SEXP XS, SEXP nrowS, SEXP ncolS,
 
 				// updating components r, p, alpha
 				means[j+gg*n] = wm[j];
-				alpha[j+gg*n] = (alphaRowMean[j]+1.0/n*(gamma[j]-1.0))/(1.0+1.0/n*(gammaSum-n));
-
+				if (iter<cyc){
+					alpha[j+gg*n] = (alphaRowMean[j]+1.0/n*(gamma[j]-1.0))/(1.0+1.0/n*(gammaSum-n));
+				} else {
+					alpha[j+gg*n] = alphaRowMean[j];
+				}
+				
 				if (wvar[j]/wm[j] < varToMeanT) { // Poisson component
 					r[j+gg*n] = -1.0;
 					//r[j+gg*n] = rmax;
