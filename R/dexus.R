@@ -578,7 +578,7 @@ dexus <- function(X, nclasses=2, alphaInit, G=1,
 			dispsA <- 1/r[,1]+1e-15
 			dispsB <- 1/r[,2]+1e-15
 			
-			pval <- nbinomTestForMatricesC(X.raw[!exclIdx,idxGroupA,drop=FALSE], X.raw[!exclIdx,idxGroupB,drop=FALSE],
+			pval <- nbinomTestForMatrices(X.raw[!exclIdx,idxGroupA,drop=FALSE], X.raw[!exclIdx,idxGroupB,drop=FALSE],
 					norm$sizeFactors[idxGroupA], norm$sizeFactors[idxGroupB], dispsA, dispsB )
 			
 			# Readjusting the low-ranked pvalues
