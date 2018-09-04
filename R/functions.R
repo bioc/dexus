@@ -82,8 +82,6 @@ initialize.clusters.quantiles <- function(x, n, mainClassIdx, rmax, dummy=NULL) 
 
 
 testMulticlass <- function(X, phi, design, design0 = NULL, normalization="none") {
-	library(statmod)	
-	library(stats)
 	if (is.null(design0))
 		design0 <- matrix(1, ncol(X))
 	

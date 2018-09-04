@@ -150,7 +150,6 @@ dexss <- function(X, nclasses=2, G=1, alphaInit,
 		colnames(X) <- paste("Sample_",1:ncol(X),sep="")
 		normalization <- "none"
 	} else if (inherits(X,"CountDataSet")) {
-		library(DESeq)
 		object <- X
 		X <- DESeq::counts(X)
 		labels <- DESeq::conditions(object)

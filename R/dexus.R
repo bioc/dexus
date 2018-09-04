@@ -30,7 +30,6 @@
 dexus.parallel <- function(X, ncores=2,
 		normalization = "RLE",
 		ignoreIfAllCountsSmaller=1,resultObject="S4", ...){
-	library(parallel)
 	### check input ############################################################
 	if (is.matrix(X)){
 		if (is.null(rownames(X))){
@@ -51,7 +50,6 @@ dexus.parallel <- function(X, ncores=2,
 		colnames(X) <- paste("Sample_",1:ncol(X),sep="")
 		normalization <- "none"
 	} else if (inherits(X,"CountDataSet")) {
-		library(DESeq)
 		object <- X
 		X <- DESeq::counts(X)
 		labels <- DESeq::conditions(object)
@@ -76,7 +74,7 @@ dexus.parallel <- function(X, ncores=2,
 	}
 	###
 	
-	if (ncores==1 | !require(parallel, quietly=TRUE)) {
+	if (ncores==1 | !requireNamespace("parallel", quietly=TRUE)) {
 		message("Switching to single-threaded code.")
 		return(dexus(X, normalization=normalization, 
 						ignoreIfAllCountsSmaller=ignoreIfAllCountsSmaller,
@@ -97,7 +95,7 @@ dexus.parallel <- function(X, ncores=2,
 						"% of the genes due to low counts"))
 	
 	d <- as.integer(nrow(X) / ncores)
-	res.par <- mclapply(1:ncores, function(i) {			
+	res.par <- parallel::mclapply(1:ncores, function(i) {			
 				a <- (i-1)*d+1
 				b <- i*d
 				if (i == ncores)
@@ -306,7 +304,6 @@ dexus <- function(X, nclasses=2, alphaInit, G=1,
 		colnames(X) <- paste("Sample_",1:ncol(X),sep="")
 		normalization <- "none"
 	} else if (inherits(X,"CountDataSet")) {
-		library(DESeq)
 		object <- X
 		X <- DESeq::counts(X)
 		labels <- DESeq::conditions(object)
@@ -500,8 +497,6 @@ dexus <- function(X, nclasses=2, alphaInit, G=1,
 		
 		
 		if (nclasses > 2) {  
-			library(statmod)
-			library(stats)
 			######### supervised multiclass ####################################
 			mode <- "multi-class"
 			
